@@ -28,9 +28,12 @@ for (i = 0; i < list.length; i++) {
 		run("Find Edges");
 //apply a size and shape(circularity) filter
 		run("Set Measurements...", "area center redirect=None decimal=3");
-		run("Analyze Particles...", "size=20-10000 circularity=0.0-1.00 show=[Overlay Masks] show=[Overlay Masks] display clear add");
+		Image.removeScale();
+		run("Analyze Particles...", "size=100-infinity circularity=0.0-1.00 show=[Overlay Masks] show=[Overlay Masks] display clear add");
 		run("Flatten");
-		saveAs("Results", dir2 + i + "_lumen_mask_" + currentImage_name + ".csv");
+		setOption("BlackBackground", true);
+		run("Convert to Mask");
+		saveAs("Results", dir2 + "0" + i + "_lumen_mask_" + currentImage_name + ".csv");
 		n_lumens = roiManager("count");
 		print(n_lumens);
 //	newImage("mask", "8-bit black", 1024, 1024, 1);
@@ -38,7 +41,7 @@ for (i = 0; i < list.length; i++) {
 //	roiManager("add");
 //	roiManager("Show All");
 //	run("Flatten");                         
-		saveAs("Tiff", dir2 + i + "_lumen_mask_" + currentImage_name);
+		saveAs("Tiff", dir2 + "0" + i + "_lumen_mask_" + currentImage_name);
 		close("*");
     }
 }

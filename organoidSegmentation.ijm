@@ -25,15 +25,21 @@ for (i = 0; i < list.length; i++) {
 		setThreshold(thresholdValue, 255);
 		run("Convert to Mask");
 		run("Fill Holes");
-		run("Set Measurements...", "area center redirect=None decimal=3");
+		run("Set Measurements...", "area center bounding redirect=None decimal=3");
+		Image.removeScale();
 		run("Watershed");
 		run("Analyze Particles...", "size=10000-800000 circularity=0.2-1.00 show=[Overlay Masks] show=[Overlay Masks] display clear add");
-		run("Flatten");
 		n_organoids = roiManager("count");
 		print(n_organoids);
-		saveAs("Results", dir2 + i + "_nuclei_mask_" + currentImage_name + ".csv");
-//		saveAs("Results", dir2 + "nuclei_mask" + currentImage_name + ".csv");                     
-		saveAs("Tiff", dir2 + i + "_nuclei_mask_" + currentImage_name);
+		for (j = 0; j < n_organoids; j++){
+			newImage("n1", "8-bit black", 1024, 1024, 1);
+			roiManager("Select", j);
+			roiManager("Add");
+			roiManager("Fill");
+			run("Flatten");
+			saveAs("Tiff", dir2 + "0" + i + "_nuclei_mask_" + "0" + j + "_" + currentImage_name);
+		}
+		saveAs("Results", dir2 + "0" + i + "_nuclei_mask_" + currentImage_name + ".csv");                    
 		close("*");
     }
 }
